@@ -9,11 +9,14 @@ app.use(express.json());
 const {signup, signin} = require('./src/controllers/auth.controllers');
 const userController = require('./src/controllers/user.controller');
 const postController = require('./src/controllers/post.controllers')
+const lectureController = require('./src/controllers/lectures.controllers')
 app.post("/signup",signup);
 app.post("/signin",signin);
 
-app.use("/users",userController);
+// app.post("/lecture",lectureController);
 
+app.use("/lectures",lectureController);
+app.use("/users",userController);
 app.use("/posts",postController);
 
 const start = async () => {

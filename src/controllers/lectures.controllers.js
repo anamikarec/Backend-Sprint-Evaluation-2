@@ -2,7 +2,7 @@ const express = require('express');
 const protect = require('../middlewares/protect');
 const router= express.Router();
 
-const Post= require('../model/post.model');
+const Lecture = require('../model/lecture.model');
 
 router.get("/",protect, async (req,res)=>{
     try{
@@ -10,12 +10,11 @@ router.get("/",protect, async (req,res)=>{
         const page = req.query.page || 1;
         const skip = page < 0 ? 0 : (page - 1)*per_page;
 
-        const posts = await Post.find().populate("name").skip(skip).limit(per_page);
+        const lectures = await Lecture.find().populate("author_id").skip(skip).limit(per_page);
 
-        if(!posts) return res.status(400).json({msg: "No posts found"}) 
-        return res.status(200).json(posts);
-        // return res.render("posts",{posts: posts})
-    }
+        if(!lectures) return res.status(400).json({msg: "No lectures found"}) 
+        return res.status(200).json(lectures);
+          }
     catch(err){
         return res.status(400).json({msg: "Something went wrong!"})
     }
@@ -23,11 +22,11 @@ router.get("/",protect, async (req,res)=>{
 
 router.post("/", async (req,res)=>{
     try{
-        const post = await Post.create(req.body)
-        return res.status(200).json({data: post})
+        const lecture = await Lecture.create(req.body)
+        return res.status(200).json({data: lecture})
     }
     catch(err){
-        return res.status(400).json({status:"failed",msg: "unable to create the post"})
+        return res.status(400).json({status:"failed",msg: "unable to create the lecture"})
     }
 })
 
