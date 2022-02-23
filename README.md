@@ -52,3 +52,9 @@
 ```
 - Note:~ After successfully signin a token will be generated. that token we will use for authentication.
 - For authentication, in the headers we will choose one header with key ```authorization``` and value ```Bearer <token>``` with the get request of ```localhost:4001/users```
+- after signin, we can create the lectures by admin or instructor in ```localhost:4001/lectures```
+- GetAllLecturesWithAuthentication ```localhost:4001/lectures```
+- Get a particular lectures with author_id with authentication```localhost:4001/lectures/<author_id>```
+- create a lecture with particular id with authentication ```localhost:4001/lectures```
+- delete a lecture with particular author_id with authorization ```localhost:4001/lectures/<author_id>```
+- patch a lecture with particular author_id with authorization ```localhost:4001/lectures/<author_id>```
