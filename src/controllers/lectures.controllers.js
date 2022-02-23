@@ -1,7 +1,8 @@
 const express = require('express');
 const protect = require('../middlewares/protect');
+// const protect2 = require('../middlewares/protect2');
 const router= express.Router();
-
+const User = require('../model/user.model');
 const Lecture = require('../model/lecture.model');
 
 router.get("/",protect, async (req,res)=>{
@@ -34,6 +35,7 @@ router.get("/:author_id",async (req,res)=>{
 })
 router.post("/", async (req,res)=>{
     try{
+        // const user = await User.findOne()
         const lecture = await Lecture.create(req.body)
         return res.status(200).json({data: lecture})
     }
@@ -46,9 +48,10 @@ router.post("/", async (req,res)=>{
 
 router.delete('/:author_id',async (req,res)=>{
     try{
+        const check = await Lecture.find()
         const lecture = await Lecture.findOneAndDelete({ _id: req.params.author_id })
         if(!lecture) return res.status(404).json({msg: "lecture not found"})
-        res.status(200).json(lecture)
+        res.status(200).json(lecture);
     }
     catch(err){
         return res.status(400).json({msg: "Something went wrong!"})
@@ -60,20 +63,21 @@ router.delete('/:author_id',async (req,res)=>{
 router.patch('/:author_id',async (req,res)=>{
     try{
         if(!req.body.title) return res.status(400).json({msg: "Title is required"});
+
         const lecture = await Lecture.findOneAndUpdate({ 
-            _id: req.params.author_id 
-        },{
-            $set: {
-                title: req.body.title,
-                batch: req.body.batch
+                _id: req.params.author_id 
+            },{
+                $set: {
+                    title: req.body.title,
+                    batch: req.body.batch
+                }
+            },{
+                returnOriginal: false
             }
-        },{
-            returnOriginal: false
+        )
+            if(!lecture) return res.status(404).json({msg: "lecture not found"})
+            res.status(200).json(lecture)
         }
-            )
-        if(!lecture) return res.status(404).json({msg: "lecture not found"})
-        res.status(200).json(lecture)
-    }
     catch(err){
         return res.status(400).json({msg: "Something went wrong!"})
     }
