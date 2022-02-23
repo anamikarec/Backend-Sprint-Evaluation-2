@@ -20,6 +20,18 @@ router.get("/",protect, async (req,res)=>{
     }
 })
 
+router.get("/:author_id",async (req,res)=>{
+    try{
+        
+        const lectures = await Lecture.findOne({_id: req.params.author_id});
+
+        if(!lectures) return res.status(400).json({msg: "No lecture found with this id"}) 
+        return res.status(200).json(lectures);
+    }
+    catch(err){
+        return res.status(400).json({msg: "Something went wrong!"})
+    }
+})
 router.post("/", async (req,res)=>{
     try{
         const lecture = await Lecture.create(req.body)
@@ -27,6 +39,43 @@ router.post("/", async (req,res)=>{
     }
     catch(err){
         return res.status(400).json({status:"failed",msg: "unable to create the lecture"})
+    }
+})
+
+
+
+router.delete('/:author_id',async (req,res)=>{
+    try{
+        const lecture = await Lecture.findOneAndDelete({ _id: req.params.author_id })
+        if(!lecture) return res.status(404).json({msg: "lecture not found"})
+        res.status(200).json(lecture)
+    }
+    catch(err){
+        return res.status(400).json({msg: "Something went wrong!"})
+    }
+})
+
+
+
+router.patch('/:author_id',async (req,res)=>{
+    try{
+        if(!req.body.title) return res.status(400).json({msg: "Title is required"});
+        const lecture = await Lecture.findOneAndUpdate({ 
+            _id: req.params.author_id 
+        },{
+            $set: {
+                title: req.body.title,
+                batch: req.body.batch
+            }
+        },{
+            returnOriginal: false
+        }
+            )
+        if(!lecture) return res.status(404).json({msg: "lecture not found"})
+        res.status(200).json(lecture)
+    }
+    catch(err){
+        return res.status(400).json({msg: "Something went wrong!"})
     }
 })
 
