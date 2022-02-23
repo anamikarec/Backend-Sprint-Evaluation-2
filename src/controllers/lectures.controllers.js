@@ -71,20 +71,19 @@ router.patch('/:author_id',async (req,res)=>{
     try{
         if(!req.body.title) return res.status(400).json({msg: "Title is required"});
         const check = await User.find({_id : req.params.author_id},{roles :1,_id:0});
-       
+        const lecture = await Lecture.findOneAndUpdate({ 
+            author_id: req.params.author_id 
+        },{
+            $set: {
+                title: req.body.title,
+                batch: req.body.batch
+            }
+        },{
+            returnOriginal: false
+        }
+    )
         check.map((item)=>{
             if(item.roles === "admin" || item.roles === "instructor"){
-                const lecture = Lecture.findOneAndUpdate({ 
-                    author_id: req.params.author_id 
-                },{
-                    $set: {
-                        title: req.body.title,
-                        batch: req.body.batch
-                    }
-                },{
-                    returnOriginal: false
-                }
-            )
                 if(!lecture) return res.status(404).json({msg: "lecture not found"})
                 res.status(200).json(lecture);
 
