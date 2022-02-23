@@ -38,3 +38,17 @@
 5. delete "/lectures/:lecture_id" ( authentication required and only the instructor who created the lecture or admin can delete the lecture)
 6. get "/lectures/:id" ( authentication not required )
 - PLEASE NOTE :- MVC architecture has to be followed.
+
+- clone the repo ```git clone https://github.com/anamikarec/Backend-Sprint-Evaluation-2.git```
+- Do ```npm i``` to install the npm packages.
+- Do a post request Signup with name, email, password, profile_photo_url and roles
+```js
+  localhost:4001/signup
+```
+- Note:~ A token will be generated.
+- Do signin by post request with email and password
+```js
+  localhost:4001/signin
+```
+- Note:~ After successfully signin a token will be generated. that token we will use for authentication.
+- For authentication, in the headers we will choose one header with key ```authorization``` and value ```Bearer <token>``` with the get request of ```localhost:4001/users```
